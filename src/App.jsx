@@ -2,56 +2,54 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
-  const [display, setDisplay] = useState("");
+  const [num, setNum] = useState("");
+  const [result, setResult] = useState("");
 
-  const handleClick = (value) => {
-    setDisplay(display + value);
+  const factorial = () => {
+    let f = 1;
+    for (let i = 1; i <= Number(num); i++) f *= i;
+    setResult("Factorial: " + f);
   };
 
-  const clearDisplay = () => {
-    setDisplay("");
-  };
-
-  const calculate = () => {
-    try {
-      setDisplay(eval(display).toString());
-    } catch {
-      setDisplay("Error");
+  const fibonacci = () => {
+    let a = 0, b = 1, series = [];
+    for (let i = 0; i < Number(num); i++) {
+      series.push(a);
+      [a, b] = [b, a + b];
     }
+    setResult("Fibonacci Series: " + series.join(", "));
+  };
+
+  const primeCheck = () => {
+    let n = Number(num);
+    if (n < 2) {
+      setResult("Not a Prime Number");
+      return;
+    }
+    for (let i = 2; i <= Math.sqrt(n); i++) {
+      if (n % i === 0) {
+        setResult("Not a Prime Number");
+        return;
+      }
+    }
+    setResult("Prime Number");
   };
 
   return (
-    <div className="calculator">
-      <h2>Calculator</h2>
+    <div className="app">
+      <h2>Math Operations</h2>
 
       <input
-        type="text"
-        className="display"
-        value={display}
-        readOnly
+        type="number"
+        placeholder="Enter number"
+        onChange={(e) => setNum(e.target.value)}
       />
 
-      <div className="buttons">
-        <button onClick={() => handleClick("7")}>7</button>
-        <button onClick={() => handleClick("8")}>8</button>
-        <button onClick={() => handleClick("9")}>9</button>
-        <button onClick={() => handleClick("/")}>÷</button>
+      <button onClick={factorial}>Factorial</button>
+      <button onClick={fibonacci}>Fibonacci</button>
+      <button onClick={primeCheck}>Prime Check</button>
 
-        <button onClick={() => handleClick("4")}>4</button>
-        <button onClick={() => handleClick("5")}>5</button>
-        <button onClick={() => handleClick("6")}>6</button>
-        <button onClick={() => handleClick("*")}>×</button>
-
-        <button onClick={() => handleClick("1")}>1</button>
-        <button onClick={() => handleClick("2")}>2</button>
-        <button onClick={() => handleClick("3")}>3</button>
-        <button onClick={() => handleClick("-")}>−</button>
-
-        <button onClick={() => handleClick("0")}>0</button>
-        <button onClick={clearDisplay}>C</button>
-        <button onClick={calculate}>=</button>
-        <button onClick={() => handleClick("+")}>+</button>
-      </div>
+      <p>{result}</p>
     </div>
   );
 }
